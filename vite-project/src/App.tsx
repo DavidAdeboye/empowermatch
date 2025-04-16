@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useState } from 'react'; // Import necessary React hooks
+import { useState } from 'react'; // Import necessary React hooks
 import { motion, AnimatePresence } from 'framer-motion'; // Import motion and AnimatePresence
 import { Menu, X } from 'lucide-react'; // Import icons for mobile menu
 import "./App.css"
