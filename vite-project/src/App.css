@@ -1,4 +1,210 @@
 @import "tailwindcss";
-body{
-    overflow-x: hidden !important;
-}
+/* App.css */
+
+/* General styling */
+body {
+    font-family: "Onest", sans-serif;
+    background-color: #141414;
+    color: white;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Glassmorphism effect (used in multiple components) */
+  .shadow-glass-inset {
+    box-shadow: inset -1.18px 0px 19.22px 11.34px rgba(255, 255, 255, 0.05);
+    -webkit-box-shadow: inset -1.18px 0px 19.22px 11.34px rgba(255, 255, 255, 0.05);
+  }
+  
+  /* Input fields */
+  input,
+  textarea {
+    font-family: "Onest", sans-serif;
+  }
+  
+  /* Improve scrolling performance */
+  @media (pointer: fine) {
+    .backdrop-blur-lg,
+    .backdrop-blur-sm,
+    .backdrop-blur-[100px],
+    .backdrop-blur-[476.339599609375px] {
+      will-change: backdrop-filter;
+      -webkit-backdrop-filter: blur(12px);
+    }
+  }
+  
+  /* Fix iOS Safari issues */
+  @supports (-webkit-touch-callout: none) {
+    html,
+    body {
+      height: -webkit-fill-available;
+    }
+    .min-h-screen {
+      min-height: -webkit-fill-available;
+    }
+  }
+  
+  /* Prevent image stretching */
+  img {
+    object-fit: contain;
+    max-width: 100%;
+  }
+  
+  /* Add these mobile-specific styles to App.css */
+  
+  /* Mobile-specific styles based on Figma design */
+  @media screen and (max-width: 430px) {
+    /* General page styling */
+    body {
+      font-family: "Onest", sans-serif;
+      background-color: #141414;
+      color: white;
+      width: 100%;
+      overflow-x: hidden;
+    }
+  
+    /* Typography adjustments for mobile */
+    h1 {
+      font-size: 36px;
+      line-height: 64px;
+      letter-spacing: 0.036em;
+    }
+  
+    h2 {
+      font-size: 24px;
+      line-height: 31px;
+      letter-spacing: 0.036em;
+    }
+  
+    p {
+      font-size: 16px;
+      line-height: 36px;
+      letter-spacing: 0.036em;
+    }
+  
+    /* Footer styling */
+    .footer-heading {
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 20px;
+      letter-spacing: 0.25px;
+    }
+  
+    .footer-link {
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 20px;
+      letter-spacing: 0.25px;
+    }
+  
+    /* Contact form styling */
+    .contact-input {
+      height: 48px;
+      border-radius: 8px;
+    }
+  
+    .contact-textarea {
+      height: 112px;
+      border-radius: 8px;
+    }
+  
+    /* Stats section styling */
+    .stat-item {
+      padding: 40px 58px;
+    }
+  
+    .stat-title {
+      font-size: 16px;
+      line-height: 20px;
+    }
+  
+    .stat-value {
+      font-size: 40px;
+      line-height: 51px;
+    }
+  
+    /* Social icons */
+    .social-icon {
+      width: 72px;
+      height: 72px;
+    }
+  
+    /* Button styling */
+    .mobile-button {
+      padding: 14px 28px;
+      height: 52px;
+      border-radius: 12px;
+      font-size: 16px;
+    }
+  
+    /* Improve touch targets on mobile */
+    button,
+    a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  
+    /* Fix for iOS Safari viewport height issues */
+    .min-h-screen {
+      min-height: -webkit-fill-available;
+    }
+  
+    /* Optimize backdrop blur performance on mobile */
+    .backdrop-blur-lg,
+    .backdrop-blur-sm,
+    .backdrop-blur-[100px] {
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+  
+    a,
+    button {
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      outline: none;
+    }
+  
+    /* Fix potential scrolling issues on iOS */
+    .overflow-x-hidden {
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+  
+    /* Improve form input styling on mobile */
+    input,
+    textarea {
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 8px;
+    }
+  }
+  
+  /* Optimize scrolling performance */
+  @media (max-width: 430px) {
+    * {
+      -webkit-overflow-scrolling: touch;
+    }
+  
+    /* Reduce motion for better performance on lower-end devices */
+    @media (prefers-reduced-motion) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  
+    /* Optimize images for mobile */
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  
+  /* Fix potential z-index stacking issues */
+  .fixed {
+    z-index: 50;
+  }
+  
