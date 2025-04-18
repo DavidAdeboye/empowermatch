@@ -544,7 +544,7 @@ const App = () => {
                   </span>
                 </div>
                 {/* Stat Item 2 */}
-                <div className="flex-1 flex flex-col justify-center items-center p-8 sm:p-10 md:p-12 gap-4 text-center border-b md:border-b-0 md:border-r md:border-r-white/15"> {/* Increased padding/gap */}
+                <div className="flex-1 flex flex-col justify-center items-center p-8 sm:p-10 md:p-12 gap-4 text-center border-b md:border-b-0 md:border-r border-white/15"> {/* Increased padding/gap */}
                   <p className="font-normal text-base sm:text-lg md:text-xl leading-snug tracking-normal text-[#EAEAEA]"> {/* Increased font size */}
                     Number of Satisfied Users
                   </p>
@@ -930,39 +930,39 @@ const App = () => {
             </motion.section>
 
             {/* Join Empower Match CTA Banner */}
-            <motion.section
-              className="relative my-16 sm:my-20 md:my-24 mx-auto max-w-7xl h-auto rounded-3xl bg-cover bg-center flex items-center overflow-hidden" // Increased margin/rounding/max-width
-              {...sectionAnimationProps}
-            >
-              <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${bannerBgSrc})` }}
-                aria-hidden="true"
-              />
-              <div className="absolute inset-0 bg-black/60 rounded-3xl"></div> {/* Overlay */}
-              <div className="relative z-10 container mx-auto px-8 sm:px-12 py-12 sm:py-20 flex flex-col md:flex-row justify-between items-center gap-8 md:gap-12"> {/* Increased padding/gap */}
-                <div className="flex flex-col gap-4 sm:gap-5 max-w-2xl text-center md:text-left"> {/* Increased gap */}
-                  <h2 className="font-semibold text-3xl sm:text-4xl md:text-5xl leading-tight tracking-tight text-white"> {/* Increased font size */}
-                    Join Empower Match Today
-                  </h2>
-                  <p className="font-medium text-lg sm:text-xl leading-relaxed text-white"> {/* Increased font size */}
-                  Together, we can build a world where technology empowers everyone!!! Become part of the solution and make a change.
-                  </p>
-                </div>
-                <motion.button
-                  className="inline-flex justify-center items-center px-8 sm:px-10 py-4 sm:py-4 gap-3 bg-white rounded-xl h-auto w-full max-w-sm md:max-w-none md:w-auto md:min-w-[280px] lg:min-w-[320px] hover:bg-gray-200 transition-colors flex-shrink-0 shadow-lg" // Increased padding/width/gap/shadow
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <span className="font-bold text-lg sm:text-xl leading-snug text-[#1A1A1A]"> {/* Increased font size */}
-                    Join Empower Match Now
-                  </span>
-                  <span className="text-[#1A1A1A]">
-                    <IconCaretRight />
-                  </span>
-                </motion.button>
-              </div>
-            </motion.section>
+<motion.section
+  className="relative my-8 sm:my-16 mx-auto max-w-7xl h-auto rounded-2xl bg-cover bg-center flex flex-col items-center sm:flex-row sm:justify-between overflow-hidden px-4 sm:px-12 py-8 sm:py-12" // Adjusted padding and margin for mobile
+  {...sectionAnimationProps}
+>
+  <div
+    className="absolute inset-0 bg-cover bg-center"
+    style={{ backgroundImage: `url(${bannerBgSrc})` }}
+    aria-hidden="true"
+  />
+  <div className="absolute inset-0 bg-black/60 rounded-2xl"></div> {/* Overlay */}
+  <div className="relative z-10 container mx-auto flex flex-col items-center sm:flex-row sm:justify-between gap-6 sm:gap-12 text-center sm:text-left">
+    <div className="flex flex-col gap-4 sm:gap-5 max-w-lg">
+      <h2 className="font-semibold text-2xl sm:text-4xl leading-tight text-white"> {/* Adjusted font size */}
+        Join Empower Match Today
+      </h2>
+      <p className="font-medium text-base sm:text-lg leading-relaxed text-white"> {/* Adjusted font size */}
+        Together, we can build a world where technology empowers everyone!!! Become part of the solution and make a change.
+      </p>
+    </div>
+    <motion.button
+      className="inline-flex justify-center items-center px-6 sm:px-8 py-3 sm:py-4 gap-3 bg-white rounded-lg h-auto w-full max-w-xs sm:max-w-none sm:w-auto hover:bg-gray-200 transition-colors shadow-lg" // Adjusted button size for mobile
+      whileHover={{ scale: 1.05, y: -2 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      <span className="font-bold text-base sm:text-lg leading-snug text-[#1A1A1A]"> {/* Adjusted font size */}
+        Join Empower Match Now
+      </span>
+      <span className="text-[#1A1A1A]">
+        <IconCaretRight />
+      </span>
+    </motion.button>
+  </div>
+</motion.section>
 
             {/* Customer Reviews (Testimonials) */}
             <motion.section
@@ -1340,12 +1340,8 @@ const App = () => {
 
             {/* Bottom Bar */}
             <div className="bg-[#1A1A1A] px-4 py-6 sm:px-8 sm:py-5 flex flex-col sm:flex-row justify-between items-center text-center sm:text-left"> {/* Adjusted padding */}
-               <p className="text-sm text-gray-400 mb-4 sm:mb-0 flex items-center"> {/* Increased font size, added items-center */}
-                 <img
-                    src="/iconlogo.png"
-                    alt="Empower Match Icon Logo"
-                    className="h-5 mr-1.5" // Adjusted margin
-                  />
+               <p className="text-sm text-gray-400 mb-4 sm:mb-0  items-center"> {/* Increased font size, added items-center */}
+                
                  © {new Date().getFullYear()} Empower Match. All rights reserved.
                </p>
               <div className="flex gap-5 sm:gap-4"> {/* Social Icons */}
