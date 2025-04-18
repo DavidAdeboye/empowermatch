@@ -247,12 +247,13 @@ const App = () => {
       img.src = src;
     });
 
+    // Fallback timeout
     const timeoutId = setTimeout(() => {
         if (loadedCount < totalImages) {
             console.warn(`Loading timeout (${loadedCount}/${totalImages} loaded), forcing loading screen hide.`);
-            handleLoad();
+            handleLoad(); // Force hide even if not all loaded
         }
-    }, 15000);
+    }, 15000); // 15 seconds timeout
 
     return () => {
       cancelled = true;
@@ -263,7 +264,7 @@ const App = () => {
 
   // --- Intersection Observer Effect ---
   useEffect(() => {
-    if (!isPageLoaded) return;
+    if (!isPageLoaded) return; // Only run observer after page is loaded
 
     const sections = document.querySelectorAll("section[id]");
     const observer = new IntersectionObserver(
@@ -274,12 +275,14 @@ const App = () => {
           }
         });
       },
-      { threshold: 0.3, rootMargin: "-100px 0px -100px 0px" }
+      { threshold: 0.3, rootMargin: "-100px 0px -100px 0px" } // Adjust threshold/rootMargin as needed
     );
 
     sections.forEach((section) => observer.observe(section));
+
+    // Cleanup observer on component unmount
     return () => sections.forEach((section) => observer.unobserve(section));
-  }, [isPageLoaded]);
+  }, [isPageLoaded]); // Rerun effect if isPageLoaded changes
 
   // --- Menu Items & IDs ---
   const menuItems = ["Home", "About Us", "Products", "Contact Us"];
@@ -293,17 +296,20 @@ const App = () => {
   // --- Mobile Link Click Handler ---
   const handleMobileLinkClick = (sectionId: string) => {
     setIsMobileMenuOpen(false);
+    // Add a slight delay to allow the menu to close before scrolling
     setTimeout(() => {
       const element = document.getElementById(sectionId);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
-    }, 300);
+    }, 300); // Adjust delay if needed
   };
 
   // --- Body Scroll Lock Effect ---
   useEffect(() => {
+    // Prevent body scroll when mobile menu is open
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    // Cleanup function to restore scroll
     return () => { document.body.style.overflow = ""; };
   }, [isMobileMenuOpen]);
 
@@ -311,7 +317,7 @@ const App = () => {
   const sectionAnimationProps = {
     initial: "hidden",
     whileInView: "show",
-    viewport: { once: true, amount: 0.15 },
+    viewport: { once: true, amount: 0.15 }, // Trigger animation when 15% is visible
     variants: fadeInUp,
   };
 
@@ -325,20 +331,22 @@ const App = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-[#141414] text-white font-onest leading-normal min-h-screen overflow-x-hidden"
+          className="bg-[#141414] text-white font-onest leading-normal min-h-screen overflow-x-hidden" // Ensure overflow-x-hidden is here
         >
           {/* --- HEADER --- */}
           <motion.header
+            // Use motion for potential animations later
             className="fixed left-0 right-0 z-50 bg-[#1e1e1e]/80 backdrop-blur-lg shadow-sm w-full md:w-[calc(100%-3rem)] max-w-6xl md:left-1/2 md:-translate-x-1/2 md:top-4 rounded-none md:rounded-xl border border-white/10"
           >
             <div className="mx-auto px-4 md:px-4 py-3 flex items-center justify-between">
+              {/* Logo */}
               <motion.img
                 src={logoSrc}
                 alt="Empower Match Logo"
-                className="w-24 md:w-28 cursor-pointer" // Slightly larger logo
+                className="w-32 md:w-36 cursor-pointer" // FIX: Increased logo size (mobile: w-32, desktop: md:w-36)
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} // Scroll to top on click
               />
 
               {/* Desktop Navigation */}
@@ -357,9 +365,9 @@ const App = () => {
                            after:h-[2px] after:w-full after:bg-[#a3e635]
                            after:origin-center after:scale-x-0 hover:after:scale-x-100
                            after:transition-transform after:duration-300 after:ease-out
-                           ${activeSection === sectionIds[item] ? "text-[#a3e635] after:scale-x-100" : ""}`} // Increased font size
+                           ${activeSection === sectionIds[item] ? "text-[#a3e635] after:scale-x-100" : ""}`} // Active state style
                     variants={staggerItem}
-                    whileHover={{ y: -2, color: "#a3e635" }}
+                    whileHover={{ y: -2, color: "#a3e635" }} // Subtle hover lift
                     whileTap={{ scale: 0.95 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
@@ -379,6 +387,7 @@ const App = () => {
                 <Menu className="w-6 h-6" /> {/* Slightly larger icon */}
               </motion.button>
 
+              {/* Desktop Sign Up Button */}
               <motion.button
                 className="hidden md:block bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 rounded-lg px-6 py-2 text-white text-base font-semibold transition-colors" // Increased padding/font size
                 whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.25)" }}
@@ -399,6 +408,7 @@ const App = () => {
                 exit="hidden"
                 variants={mobileMenuVariant}
               >
+                {/* Close Button */}
                 <motion.button
                   className="absolute top-6 right-6 p-2 text-gray-300 hover:text-white" // Adjusted position
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -409,19 +419,21 @@ const App = () => {
                   <X className="w-7 h-7" />
                 </motion.button>
 
+                {/* Mobile Navigation Links */}
                 <ul className="flex flex-col items-center gap-8"> {/* Increased gap */}
                   {menuItems.map((item) => (
                     <li key={item}>
                       <a
                         href={`#${sectionIds[item]}`}
-                        onClick={() => handleMobileLinkClick(sectionIds[item])}
+                        onClick={() => handleMobileLinkClick(sectionIds[item])} // Use handler to close menu
                         className={`font-medium text-2xl text-gray-100 hover:text-[#a3e635] transition-colors
-                              ${activeSection === sectionIds[item] ? "text-[#a3e635]" : ""}`} // Increased font size
+                              ${activeSection === sectionIds[item] ? "text-[#a3e635]" : ""}`} // Increased font size & active style
                       >
                         {item}
                       </a>
                     </li>
                   ))}
+                  {/* Mobile Sign Up Button */}
                   <li>
                     <button
                       className="mt-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 rounded-lg px-10 py-3 flex items-center justify-center transition-colors text-white font-semibold text-lg" // Increased size & padding
@@ -439,7 +451,7 @@ const App = () => {
           </AnimatePresence>
 
           {/* --- MAIN CONTENT --- */}
-          <main className="pt-24 md:pt-28"> {/* Increased top padding */}
+          <main className="pt-24 md:pt-28"> {/* Increased top padding to account for fixed header */}
             {/* Hero Section */}
             <motion.section
               id="home"
@@ -467,31 +479,46 @@ const App = () => {
               </div>
             </motion.section>
 
-            {/* App Showcase (UI Frame) */}
-            <motion.section
-              className="py-12 sm:py-16 px-4 sm:px-6" // Increased padding
-              {...sectionAnimationProps}
-            >
-              <div className="container mx-auto max-w-7xl relative overflow-hidden border border-white/10 shadow-glass-inset rounded-3xl"> {/* Increased max-width & rounding */}
-                <div
-                  className="absolute inset-0 z-0 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${bgImageUrl})` }}
-                  aria-hidden="true"
-                />
-                <div
-                  className="absolute inset-0 z-10 backdrop-blur-[70px] bg-gradient-radial from-[white/15] to-white/30 shadow-sm" // Increased blur
-                  style={{ willChange: "backdrop-filter" }}
-                />
-                <div className="relative z-20 p-4 sm:p-8 md:p-10"> {/* Increased padding */}
-                  <div
-                    className="w-full h-auto aspect-[1488/962] bg-cover bg-center rounded-2xl shadow-xl" // Increased rounding & shadow
-                    style={{ backgroundImage: `url(${appShowcaseContentSrc})` }}
-                    aria-label="App Showcase Frame Content"
-                  ></div>
-                </div>
-              </div>
-            </motion.section>
-
+                        {/* App Showcase (UI Frame) */}
+                        <motion.section
+                          className="py-12 sm:py-16 px-4 sm:px-6" // Section padding remains
+                          {...sectionAnimationProps}
+                        >
+                          {/* Container with border, shadow, rounding. Overflow hidden still needed */}
+                          {/* Background image and blur are now conditionally applied INSIDE */}
+                          <div className="container mx-auto max-w-7xl relative overflow-hidden border border-white/10 shadow-glass-inset rounded-3xl">
+            
+                            {/* Background Image Layer - HIDDEN on mobile, shown md+ */}
+                            <div
+                              className="absolute inset-0 z-0 hidden md:block md:bg-cover md:bg-center" // Hidden by default, block + styled on md+
+                              style={{ backgroundImage: `url(${bgImageUrl})` }}
+                              aria-hidden="true"
+                            />
+            
+                            {/* Blur Overlay Layer - HIDDEN on mobile, shown md+ */}
+                            <div
+                              className="absolute inset-0 z-10 hidden md:block md:backdrop-blur-[70px] md:bg-gradient-radial from-[white/15] to-white/30 shadow-sm rounded-3xl" // Hidden by default, block + styled on md+
+                              style={{ willChange: "backdrop-filter" }} // Hint for performance
+                              aria-hidden="true"
+                            />
+            
+                            {/* Content Layer (with padding) - Always visible */}
+                            {/* Added bg-[#141414] md:bg-transparent so it has a solid bg on mobile when blur/bg image are hidden */}
+                            <div className="relative z-20 p-4 sm:p-8 md:p-10 bg-[#141414] md:bg-transparent rounded-3xl"> {/* Added bg for mobile, transparent for md+ */}
+            
+                              {/* Actual Image Content - Always visible */}
+                              <div
+                                className="w-full h-auto aspect-[1488/962] bg-cover bg-center rounded-lg shadow-xl" // Rounding & shadow for the image itself
+                                style={{ backgroundImage: `url(${appShowcaseContentSrc})` }}
+                                aria-label="App Showcase Frame Content"
+                              >
+                                {/* Intentionally empty - content is the background image */}
+                              </div>
+            
+                            </div>
+                          </div>
+                        </motion.section>
+            
             {/* Stats Section */}
             <motion.section
               className="my-16 sm:my-20 md:my-24 mx-auto max-w-7xl relative overflow-hidden border border-white/10 shadow-glass-inset rounded-3xl" // Increased rounding, margin, max-width
@@ -503,7 +530,7 @@ const App = () => {
                 aria-hidden="true"
               />
               <div
-                className="absolute inset-0 z-10 backdrop-blur-[70px] shadow-[-1px_0px_20px_10px_rgba(255,255,255,0.05)_inset]" // Increased blur & shadow
+                className="absolute inset-0 z-10 backdrop-blur-[70px] shadow-[-1px_0px_20px_10px_rgba(255,255,255,0.05)_inset] rounded-3xl" // Increased blur & shadow, ensured rounded-3xl
                 style={{ willChange: "backdrop-filter" }}
               />
               <div className="relative z-20 flex flex-col md:flex-row md:h-auto">
@@ -519,10 +546,10 @@ const App = () => {
                 {/* Stat Item 2 */}
                 <div className="flex-1 flex flex-col justify-center items-center p-8 sm:p-10 md:p-12 gap-4 text-center border-b md:border-b-0 md:border-r md:border-r-white/15"> {/* Increased padding/gap */}
                   <p className="font-normal text-base sm:text-lg md:text-xl leading-snug tracking-normal text-[#EAEAEA]"> {/* Increased font size */}
-                    Number of Apps on Empower Match
+                    Number of Satisfied Users
                   </p>
                   <span className="font-semibold text-4xl sm:text-5xl md:text-6xl leading-tight tracking-tight text-[#EAEAEA]"> {/* Increased font size */}
-                    200+
+                    12.5k
                   </span>
                 </div>
                 {/* Stat Item 3 */}
@@ -531,7 +558,7 @@ const App = () => {
                     General rating
                   </p>
                   <span className="font-semibold text-4xl sm:text-5xl md:text-6xl leading-tight tracking-tight text-[#EAEAEA]"> {/* Increased font size */}
-                    4.8 ★
+                    4.8
                   </span>
                 </div>
               </div>
@@ -673,16 +700,15 @@ const App = () => {
                 <div className="flex flex-col gap-16 sm:gap-24 w-full"> {/* Increased gap */}
 
                   {/* Product Row 1 (Wheelmap) */}
-                  {/* UPDATED: Removed border on md+ */}
                   <div className="relative overflow-hidden rounded-2xl border md:border-0 border-white/10">
-                    {/* Background Image (Always present) */}
+                    {/* Background Image (Mobile Only Blur Background) */}
                     <div
                       className="absolute inset-0 z-0 bg-cover bg-center opacity-20 md:opacity-0" /* Hide on md+ */
                       style={{ backgroundImage: `url(${bgImageUrl})` }}
                       aria-hidden="true"
                     />
-                    {/* Blur Overlay (Conditional) */}
-                    <div className="absolute inset-0 z-10 rounded-2xl bg-black/60 backdrop-blur-lg md:bg-transparent md:backdrop-blur-none" />
+                    {/* Blur Overlay (Mobile Only) */}
+                    <div className="absolute inset-0 z-10 rounded-2xl backdrop-blur-lg md:bg-transparent md:backdrop-blur-none" />
 
                     {/* Content Container (With Padding) */}
                     <div className="relative z-20 flex flex-col md:flex-row items-center gap-8 md:gap-12 lg:gap-20 w-full p-8 sm:p-10 lg:p-12"> {/* Increased padding/gap */}
@@ -727,23 +753,22 @@ const App = () => {
                   </div>
 
                   {/* Product Row 2 (SoundAlert - Order reversed on md) */}
-                  {/* UPDATED: Removed border on md+ */}
                   <div className="relative overflow-hidden rounded-2xl border md:border-0 border-white/10">
-                     {/* Background Image (Always present) */}
+                     {/* Background Image (Mobile Only Blur Background) */}
                     <div
                       className="absolute inset-0 z-0 bg-cover bg-center opacity-20 md:opacity-0" /* Hide on md+ */
                       style={{ backgroundImage: `url(${bgImageUrl})` }}
                       aria-hidden="true"
                     />
-                    {/* Blur Overlay (Conditional) */}
-                    <div className="absolute inset-0 z-10 rounded-2xl bg-black/60 backdrop-blur-lg md:bg-transparent md:backdrop-blur-none" />
+                    {/* Blur Overlay (Mobile Only) */}
+                    <div className="absolute inset-0 z-10 rounded-2xl backdrop-blur-lg md:bg-transparent md:backdrop-blur-none" />
 
                     {/* Content Container (With Padding) */}
                     <div className="relative z-20 flex flex-col md:flex-row items-center gap-8 md:gap-12 lg:gap-20 w-full p-8 sm:p-10 lg:p-12"> {/* Increased padding/gap */}
-                       {/* Text Left */}
+                       {/* Text Left (Order 1 on mobile, Order 1 on md) */}
                       <div className="flex flex-col gap-5 sm:gap-7 md:w-1/2 lg:w-7/12 md:order-1"> {/* Increased gap */}
                         <h3 className="font-semibold text-2xl sm:text-3xl leading-tight tracking-tight text-[#F2F2F2]"> {/* Increased font size */}
-                          SoundAlert
+                          Sound Alert
                         </h3>
                         <p className="font-medium text-base sm:text-lg leading-relaxed text-[#DCDCDC]"> {/* Increased font size */}
                         Enhancing safety for users with hearing impairments, this app alerts them to important sounds in their environment, providing awareness and security.
@@ -765,34 +790,31 @@ const App = () => {
                           </motion.button>
                         </div>
                       </div>
-                      {/* Image Right Container */}
+                      {/* Image Right Container (Order 2 on mobile, Order 2 on md) */}
                       <motion.div
-                        className="w-full md:w-1/2 lg:w-5/12 flex-shrink-0 flex items-center justify-center p-4 md:order-2"
+                        className="w-full md:w-1/2 lg:w-5/12 flex-shrink-0 flex items-center justify-center p-4 md:order-2" /* Ensure order is correct */
                         whileHover={{ scale: 1.03 }}
                       >
-                         <div className="w-full max-w-sm sm:max-w-md md:max-w-lg h-auto aspect-square bg-white/10 backdrop-blur-sm rounded-3xl shadow-xl flex items-center justify-center overflow-hidden border border-white/10 p-6"> {/* Increased max-width, rounding, padding, shadow */}
-                            <img
-                              src={earSrc}
-                              alt="Sound Alert Icon"
-                              className="w-full h-auto object-contain"
-                              loading="lazy"
-                            />
-                          </div>
+                        <img
+                          src={earSrc}
+                          alt="Sound Alert Icon"
+                          className="w-full max-w-sm sm:max-w-md md:max-w-lg h-auto object-contain"
+                          loading="lazy"
+                        />
                       </motion.div>
                     </div>
                   </div>
 
                   {/* Product Row 3 (Accessibility Scanner) */}
-                  {/* UPDATED: Removed border on md+ */}
                   <div className="relative overflow-hidden rounded-2xl border md:border-0 border-white/10">
-                     {/* Background Image (Always present) */}
+                     {/* Background Image (Mobile Only Blur Background) */}
                     <div
                       className="absolute inset-0 z-0 bg-cover bg-center opacity-20 md:opacity-0" /* Hide on md+ */
                       style={{ backgroundImage: `url(${bgImageUrl})` }}
                       aria-hidden="true"
                     />
-                    {/* Blur Overlay (Conditional) */}
-                    <div className="absolute inset-0 z-10 rounded-2xl bg-black/60 backdrop-blur-lg md:bg-transparent md:backdrop-blur-none" />
+                    {/* Blur Overlay (Mobile Only) */}
+                    <div className="absolute inset-0 z-10 rounded-2xl backdrop-blur-lg md:bg-transparent md:backdrop-blur-none" />
 
                     {/* Content Container (With Padding) */}
                     <div className="relative z-20 flex flex-col md:flex-row items-center gap-8 md:gap-12 lg:gap-20 w-full p-8 sm:p-10 lg:p-12"> {/* Increased padding/gap */}
@@ -837,20 +859,19 @@ const App = () => {
                   </div>
 
                   {/* Product Row 4 (Live Transcribe - Order reversed on md) */}
-                  {/* UPDATED: Removed border on md+ */}
                   <div className="relative overflow-hidden rounded-2xl border md:border-0 border-white/10">
-                     {/* Background Image (Always present) */}
+                     {/* Background Image (Mobile Only Blur Background) */}
                     <div
                       className="absolute inset-0 z-0 bg-cover bg-center opacity-20 md:opacity-0" /* Hide on md+ */
                       style={{ backgroundImage: `url(${bgImageUrl})` }}
                       aria-hidden="true"
                     />
-                    {/* Blur Overlay (Conditional) */}
-                    <div className="absolute inset-0 z-10 rounded-2xl bg-black/60 backdrop-blur-lg md:bg-transparent md:backdrop-blur-none" />
+                    {/* Blur Overlay (Mobile Only) */}
+                    <div className="absolute inset-0 z-10 rounded-2xl backdrop-blur-lg md:bg-transparent md:backdrop-blur-none" />
 
                     {/* Content Container (With Padding) */}
                     <div className="relative z-20 flex flex-col md:flex-row items-center gap-8 md:gap-12 lg:gap-20 w-full p-8 sm:p-10 lg:p-12"> {/* Increased padding/gap */}
-                      {/* Text Left */}
+                      {/* Text Left (Order 1 on mobile, Order 1 on md) */}
                       <div className="flex flex-col gap-5 sm:gap-7 md:w-1/2 lg:w-7/12 md:order-1"> {/* Increased gap */}
                         <h3 className="font-semibold text-2xl sm:text-3xl leading-tight tracking-tight text-[#F2F2F2]"> {/* Increased font size */}
                           Live Transcribe
@@ -876,9 +897,9 @@ const App = () => {
                           </motion.button>
                         </div>
                       </div>
-                      {/* Image Right Container */}
+                      {/* Image Right Container (Order 2 on mobile, Order 2 on md) */}
                        <motion.div
-                        className="w-full md:w-1/2 lg:w-5/12 flex-shrink-0 flex items-center justify-center p-4 md:order-2"
+                        className="w-full md:w-1/2 lg:w-5/12 flex-shrink-0 flex items-center justify-center p-4 md:order-2" /* Ensure order is correct */
                         whileHover={{ scale: 1.03 }}
                       >
                           <img
@@ -918,7 +939,7 @@ const App = () => {
                 style={{ backgroundImage: `url(${bannerBgSrc})` }}
                 aria-hidden="true"
               />
-              <div className="absolute inset-0 bg-black/60 rounded-3xl"></div>
+              <div className="absolute inset-0 bg-black/60 rounded-3xl"></div> {/* Overlay */}
               <div className="relative z-10 container mx-auto px-8 sm:px-12 py-12 sm:py-20 flex flex-col md:flex-row justify-between items-center gap-8 md:gap-12"> {/* Increased padding/gap */}
                 <div className="flex flex-col gap-4 sm:gap-5 max-w-2xl text-center md:text-left"> {/* Increased gap */}
                   <h2 className="font-semibold text-3xl sm:text-4xl md:text-5xl leading-tight tracking-tight text-white"> {/* Increased font size */}
@@ -1012,7 +1033,7 @@ const App = () => {
                             />
                             <div className="flex flex-col gap-1.5">
                               <h4 className="font-semibold text-lg sm:text-xl leading-snug text-[#FEFEFE]">
-                              Oluwalonimi bankole
+                              Oluwalonimi Bankole
                               </h4>
                               <p className="font-normal text-base sm:text-lg leading-snug text-[#DCDCDC]">Student</p>
                             </div>
@@ -1218,6 +1239,7 @@ const App = () => {
                     <label htmlFor="newsletter-email" className="sr-only">
                       Email Address
                     </label>
+                    {/* Input Wrapper with Blur */}
                     <div className="flex-grow h-12 sm:h-14 relative overflow-hidden border border-white/10 shadow-glass-inset rounded-t-lg sm:rounded-l-lg sm:rounded-r-none"> {/* Increased height */}
                       <div
                         className="absolute inset-0 z-0 bg-cover bg-center"
@@ -1233,6 +1255,7 @@ const App = () => {
                         className="relative z-20 w-full h-full px-5 bg-transparent rounded-t-lg sm:rounded-l-lg sm:rounded-r-none font-semibold text-lg sm:text-xl leading-snug text-[#FBFBFB] placeholder:text-[#FBFBFB]/70 focus:outline-none focus:ring-2 focus:ring-blue-500" // Increased padding/font size
                       />
                     </div>
+                    {/* Submit Button */}
                     <motion.button
                       type="submit"
                       aria-label="Subscribe to newsletter"
@@ -1255,20 +1278,15 @@ const App = () => {
               <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-8 lg:gap-12 max-w-7xl"> {/* Increased max-width */}
 
                 {/* Column 1: Logo & Brief */}
-                <div className="flex flex-col gap-4 items-start col-span-1 sm:col-span-2 lg:col-span-1">
-                   <div className="flex items-center gap-3 mb-3"> {/* Increased gap/margin */}
-                      <img
-                        src={logoFooterSrc}
-                        alt="Empower Match Footer Logo"
-                        className="h-9 w-auto" // Increased size
-                      />
-                      <span className="font-semibold text-xl text-white"> {/* Increased size */}
-                        Empower Match
-                      </span>
-                    </div>
-                    <p className="text-base text-gray-400 leading-relaxed"> {/* Increased size */}
-                        Bridging accessibility gaps through innovative technology for an inclusive digital world.
-                    </p>
+                <div className="flex flex-col gap-5"> {/* Added gap */}
+                  <img
+                    src={logoFooterSrc}
+                    alt="Empower Match Footer Logo"
+                    className="w-32 h-auto mb-2" // Increased size
+                  />
+                  <p className="font-normal text-base text-[#BFBFBF] leading-relaxed">
+                    Bridging accessibility gaps with innovative technology for an inclusive world.
+                  </p>
                 </div>
 
                 {/* Column 2: Company Links */}
@@ -1322,10 +1340,15 @@ const App = () => {
 
             {/* Bottom Bar */}
             <div className="bg-[#1A1A1A] px-4 py-6 sm:px-8 sm:py-5 flex flex-col sm:flex-row justify-between items-center text-center sm:text-left"> {/* Adjusted padding */}
-               <p className="text-sm text-gray-400 mb-4 sm:mb-0"> {/* Increased font size */}
+               <p className="text-sm text-gray-400 mb-4 sm:mb-0 flex items-center"> {/* Increased font size, added items-center */}
+                 <img
+                    src="/iconlogo.png"
+                    alt="Empower Match Icon Logo"
+                    className="h-5 mr-1.5" // Adjusted margin
+                  />
                  © {new Date().getFullYear()} Empower Match. All rights reserved.
                </p>
-              <div className="flex gap-5 sm:gap-4">
+              <div className="flex gap-5 sm:gap-4"> {/* Social Icons */}
                 <motion.a href="#facebook" aria-label="Facebook" className="w-9 h-9 flex items-center justify-center hover:bg-white/10 rounded-full transition-colors" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                   <IconFacebook />
                 </motion.a>
